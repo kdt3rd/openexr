@@ -73,25 +73,25 @@ jobs:
 # ------------------------------------------------------------------------------
 #  SonarCloud static analysis
 # ------------------------------------------------------------------------------
-- job: SonarCloud
-  displayName: SonarCloud Ubuntu 16.04 VFX CY2019
-  condition: in(variables['Build.Reason'], 'Manual', 'Schedule')
-  pool:
-    vmImage: 'ubuntu-16.04'
-  container: aswfstaging/ci-base:2019.0
-
-  steps:
-  - template: share/ci/templates/checkout.yml
-  - bash: ''
-    displayName: Install dependencies
-  - template: share/ci/templates/configure.yml
-    parameters:
-      cxxFlags: -g -O0 -fprofile-arcs -ftest-coverage
-      cmakeOpts: |
-        -DCMAKE_EXE_LINKER_FLAGS="-lgcov" \
-        -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=ON
-
-  - template: share/ci/templates/build_sonar.yml
+#- job: SonarCloud
+#  displayName: SonarCloud Ubuntu 16.04 VFX CY2019
+#  condition: in(variables['Build.Reason'], 'Manual', 'Schedule')
+#  pool:
+#    vmImage: 'ubuntu-16.04'
+#  container: aswfstaging/ci-base:2019.0
+#
+#  steps:
+#  - template: share/ci/templates/checkout.yml
+#  - bash: ''
+#    displayName: Install dependencies
+#  - template: share/ci/templates/configure.yml
+#    parameters:
+#      cxxFlags: -g -O0 -fprofile-arcs -ftest-coverage
+#      cmakeOpts: |
+#        -DCMAKE_EXE_LINKER_FLAGS="-lgcov" \
+#        -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=ON
+#
+#  - template: share/ci/templates/build_sonar.yml
 
 # ------------------------------------------------------------------------------
 # macOS
