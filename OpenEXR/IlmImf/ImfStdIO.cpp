@@ -127,7 +127,7 @@ make_ifstream (const char *filename)
             "Unable to open input filestream: " + std::string (errbuf));
     }
     ifstream* ret = new ifstream;
-    ret->exceptions (0);
+    ret->exceptions (std::ios_base::goodbit);
     using CharT   = ifstream::char_type;
     using TraitsT = ifstream::traits_type;
     if (static_cast<InjectFilebuf<CharT, TraitsT>*> (ret->rdbuf ())
@@ -138,7 +138,7 @@ make_ifstream (const char *filename)
     }
 #    else
     ifstream* ret = new ifstream(wfn.c_str (), ios_base::in | ios_base::binary);
-    ret->exceptions (0);
+    ret->exceptions (std::ios_base::goodbit);
 #    endif
     return ret;
 }
@@ -164,7 +164,7 @@ make_ofstream (const char* filename)
             "Unable to open output filestream: " + std::string(errbuf));
     }
     ofstream* ret = new ofstream;
-    ret->exceptions (0);
+    ret->exceptions (std::ios_base::goodbit);
     using CharT   = ifstream::char_type;
     using TraitsT = ifstream::traits_type;
     if (static_cast<InjectFilebuf<CharT, TraitsT>*> (ret->rdbuf ())
@@ -175,7 +175,7 @@ make_ofstream (const char* filename)
     }
 #    else
     ofstream *ret = new ofstream (wfn.c_str (), ios_base::binary);
-    ret->exceptions (0);
+    ret->exceptions (std::ios_base::goodbit);
 #    endif
     return ret;
 }
