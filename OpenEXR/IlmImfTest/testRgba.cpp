@@ -286,8 +286,18 @@ writeReadIncomplete (const std::string &tempDir)
 	    {
 		scanLineBroken = true;		// scan line cannot be decoded
 	    }
+        catch (std::exception &e)
+        {
+            cerr << "\n\nGACK: " << e.what() << endl;
+            scanLineBroken = true;
+        }
+        catch (...)
+        {
+            cerr << "\n\nGACK: <UNKNOWN>" << endl;
+            scanLineBroken = true;
+        }
 
-	    if (y == 10 || y == 25)
+            if (y == 10 || y == 25)
 		assert (scanLineBroken);
 	    else
 		assert (scanLinePresent == (y < height / 2));
