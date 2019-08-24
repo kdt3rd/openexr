@@ -290,11 +290,13 @@ writeReadIncomplete (const std::string &tempDir)
         {
             cerr << "\n\nGACK: " << e.what() << endl;
             scanLineBroken = true;
+            scanLinePresent = false;
         }
         catch (...)
         {
             cerr << "\n\nGACK: <UNKNOWN>" << endl;
             scanLineBroken = true;
+            scanLinePresent = false;
         }
 
             if (y == 10 || y == 25)
