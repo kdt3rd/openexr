@@ -25,103 +25,103 @@ jobs:
 
 # TODO: Move Docker images to ASWF DockerHub account
 
-- job: Linux
-  strategy:
-    matrix:
-      CentOS 7 gcc VFX CY2019:
-        agentImage: 'ubuntu-16.04'
-        containerImage: aswfstaging/ci-openexr:2019.0
-        cxxCompiler: g++
-        cCompiler: gcc
-        installSh: ''
-      CentOS 7 Clang 7 VFX CY2019:
-        agentImage: 'ubuntu-16.04'
-        containerImage: aswfstaging/ci-openexr:2019.0
-        cxxCompiler: clang++
-        cCompiler: clang
-        installSh: ''
-  pool:
-    vmImage: $(agentImage)
-  container: $[ variables['containerImage'] ]
-
-  steps:
-  - template: share/ci/templates/checkout.yml
-  - bash: $(installSh)
-    displayName: Install dependencies
-    condition: and(succeeded(), variables['installSh'])
-
-  - template: share/ci/templates/configure.yml
-    parameters:
-      cxxCompiler: $(cxxCompiler)
-      cCompiler: $(cCompiler)
-
-  - template: share/ci/templates/build.yml
-    parameters:
-      cxxCompiler: $(cxxCompiler)
-      cCompiler: $(cCompiler)
-      cmakeOpts: -- -j4
-      excludeTests: ''
-
-  - task: PublishTestResults@2
-    condition: succeededOrFailed()
-    displayName: 'Publish test results'
-    inputs:
-      testResultsFormat: 'cTest'
-      testResultsFiles: '**/Test*.xml' 
-      failTaskOnFailedTests: true
+#- job: Linux
+#  strategy:
+#    matrix:
+#      CentOS 7 gcc VFX CY2019:
+#        agentImage: 'ubuntu-16.04'
+#        containerImage: aswfstaging/ci-openexr:2019.0
+#        cxxCompiler: g++
+#        cCompiler: gcc
+#        installSh: ''
+#      CentOS 7 Clang 7 VFX CY2019:
+#        agentImage: 'ubuntu-16.04'
+#        containerImage: aswfstaging/ci-openexr:2019.0
+#        cxxCompiler: clang++
+#        cCompiler: clang
+#        installSh: ''
+#  pool:
+#    vmImage: $(agentImage)
+#  container: $[ variables['containerImage'] ]
+#
+#  steps:
+#  - template: share/ci/templates/checkout.yml
+#  - bash: $(installSh)
+#    displayName: Install dependencies
+#    condition: and(succeeded(), variables['installSh'])
+#
+#  - template: share/ci/templates/configure.yml
+#    parameters:
+#      cxxCompiler: $(cxxCompiler)
+#      cCompiler: $(cCompiler)
+#
+#  - template: share/ci/templates/build.yml
+#    parameters:
+#      cxxCompiler: $(cxxCompiler)
+#      cCompiler: $(cCompiler)
+#      cmakeOpts: -- -j4
+#      excludeTests: ''
+#
+#  - task: PublishTestResults@2
+#    condition: succeededOrFailed()
+#    displayName: 'Publish test results'
+#    inputs:
+#      testResultsFormat: 'cTest'
+#      testResultsFiles: '**/Test*.xml' 
+#      failTaskOnFailedTests: true
 
 # ------------------------------------------------------------------------------
 #  SonarCloud static analysis
 # ------------------------------------------------------------------------------
-#- job: SonarCloud
-#  displayName: SonarCloud Ubuntu 16.04 VFX CY2019
-#  condition: in(variables['Build.Reason'], 'Manual', 'Schedule')
-#  pool:
-#    vmImage: 'ubuntu-16.04'
-#  container: aswfstaging/ci-base:2019.0
-#
-#  steps:
-#  - template: share/ci/templates/checkout.yml
-#  - bash: ''
-#    displayName: Install dependencies
-#  - template: share/ci/templates/configure.yml
-#    parameters:
-#      cxxFlags: -g -O0 -fprofile-arcs -ftest-coverage
-#      cmakeOpts: |
-#        -DCMAKE_EXE_LINKER_FLAGS="-lgcov" \
-#        -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=ON
-#
-#  - template: share/ci/templates/build_sonar.yml
+- job: SonarCloud
+  displayName: SonarCloud Ubuntu 16.04 VFX CY2019
+  condition: in(variables['Build.Reason'], 'Manual', 'Schedule')
+  pool:
+    vmImage: 'ubuntu-16.04'
+  container: aswfstaging/ci-base:2019.0
+
+  steps:
+  - template: share/ci/templates/checkout.yml
+  - bash: ''
+    displayName: Install dependencies
+  - template: share/ci/templates/configure.yml
+    parameters:
+      cxxFlags: -g -O0 -fprofile-arcs -ftest-coverage
+      cmakeOpts: |
+        -DCMAKE_EXE_LINKER_FLAGS="-lgcov" \
+        -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=ON
+
+  - template: share/ci/templates/build_sonar.yml
 
 # ------------------------------------------------------------------------------
 # macOS
 # ------------------------------------------------------------------------------
-- job: macOS
-  strategy:
-    matrix:
-      10.14 AppleClang 10.0:
-        agentImage: 'macOS-10.14'
-      10.13 AppleClang 10.0:
-        agentImage: 'macOS-10.13'
-  pool:
-    vmImage: $(agentImage)
-
-  steps:
-  - template: share/ci/templates/checkout.yml
-  - bash: |
-      share/ci/scripts/macos/install_python.sh 2.7.16
-      share/ci/scripts/macos/install_python.sh 3.7.4
-      share/ci/scripts/macos/install.sh
-    displayName: Install dependencies
-
-  - template: share/ci/templates/configure.yml
-    parameters:
-      cmakeOpts: ''
-
-  - template: share/ci/templates/build.yml
-    parameters:
-      cmakeOpts: -- -j4
-      excludeTests: ''
+#- job: macOS
+#  strategy:
+#    matrix:
+#      10.14 AppleClang 10.0:
+#        agentImage: 'macOS-10.14'
+#      10.13 AppleClang 10.0:
+#        agentImage: 'macOS-10.13'
+#  pool:
+#    vmImage: $(agentImage)
+#
+#  steps:
+#  - template: share/ci/templates/checkout.yml
+#  - bash: |
+#      share/ci/scripts/macos/install_python.sh 2.7.16
+#      share/ci/scripts/macos/install_python.sh 3.7.4
+#      share/ci/scripts/macos/install.sh
+#    displayName: Install dependencies
+#
+#  - template: share/ci/templates/configure.yml
+#    parameters:
+#      cmakeOpts: ''
+#
+#  - template: share/ci/templates/build.yml
+#    parameters:
+#      cmakeOpts: -- -j4
+#      excludeTests: ''
 
 
 # ------------------------------------------------------------------------------
