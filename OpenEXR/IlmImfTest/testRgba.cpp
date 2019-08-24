@@ -288,7 +288,7 @@ writeReadIncomplete (const std::string &tempDir)
 	    }
         catch (std::exception &e)
         {
-            cerr << "\n\nGACK: " << e.what() << endl;
+            cerr << "\n\nGACK reading scanline " << y << " / " << height << ": " << e.what() << endl;
             scanLineBroken = true;
             scanLinePresent = false;
         }
