@@ -60,7 +60,7 @@ jobs:
       cxxCompiler: $(cxxCompiler)
       cCompiler: $(cCompiler)
       cmakeOpts: -- -j4
-      excludeTests: 'PyIlmBase.PyImath*'
+      excludeTests: ''
 
   - task: PublishTestResults@2
     condition: succeededOrFailed()
