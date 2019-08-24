@@ -121,7 +121,7 @@ jobs:
   - template: share/ci/templates/build.yml
     parameters:
       cmakeOpts: -- -j4
-      excludeTests: 'PyIlmBase.PyImath_*'
+      excludeTests: ''
 
 
 # ------------------------------------------------------------------------------
@@ -160,6 +160,6 @@ jobs:
   - template: share/ci/templates/build.yml
     parameters:
       cmakeOpts: -- 
-      excludeTests: 'PyIlmBase.PyImath_*|OpenEXR.IlmImf$'
+      excludeTests: ''
 
 
