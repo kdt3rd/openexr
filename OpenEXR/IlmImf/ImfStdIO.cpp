@@ -196,6 +196,9 @@ make_ofstream (const char* filename)
 void
 clearError ()
 {
+#ifdef _WIN32
+    SetLastError(0);
+#endif
     errno = 0;
 }
 
@@ -205,6 +208,28 @@ checkError (istream &is, streamsize expected = 0)
 {
     if (!is)
     {
+#ifdef _WIN32
+        DWORD lastErr = GetLastError();
+        if ( lastErr != ERROR_SUCCESS )
+        {
+            LPVOID lpMsgBuf;
+
+            FormatMessage (
+                FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                    FORMAT_MESSAGE_FROM_SYSTEM |
+                    FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                lastErr,
+                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
+                (LPTSTR) &lpMsgBuf,
+                0,
+                NULL);
+
+            std::string msg ( (LPCTSTR)lpMsgBuf );
+            LocalFree (lpMsgBuf);
+            throw IEX_NAMESPACE::IoExc (msg);
+        }
+#endif
 	if (errno)
 	    IEX_NAMESPACE::throwErrnoExc();
 
