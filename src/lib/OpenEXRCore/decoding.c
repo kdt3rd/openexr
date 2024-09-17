@@ -549,6 +549,10 @@ exr_decoding_run (
             EXR_ERR_INVALID_ARGUMENT,
             "Invalid request for decoding update from different context / part");
 
+    /* if we have nothing to do, can early return */
+    if (decode->chunk.unpacked_size == 0)
+        return EXR_ERR_SUCCESS;
+
     if (!decode->read_fn)
         return ctxt->report_error (
             ctxt,

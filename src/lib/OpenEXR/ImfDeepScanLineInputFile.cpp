@@ -1011,6 +1011,9 @@ void ScanLineProcess::copy_sample_count (
 {
     const Slice& scslice = outfb->getSampleCountSlice ();
 
+    if (cinfo.unpacked_size == 0)
+        return;
+
     int     end = cinfo.height - decoder.user_line_end_ignore;
     int64_t xS = int64_t (scslice.xStride);
     int64_t yS = int64_t (scslice.yStride);
